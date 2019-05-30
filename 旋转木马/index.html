@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrap" id="wrap">
+    <div class="slide" id="slide">
+      <ul>
+        <li><a href=""><img src="./images/slidepic1.jpg" alt=""></a></li>
+        <li><a href=""><img src="./images/slidepic2.jpg" alt=""></a></li>
+        <li><a href=""><img src="./images/slidepic3.jpg" alt=""></a></li>
+        <li><a href=""><img src="./images/slidepic4.jpg" alt=""></a></li>
+        <li><a href=""><img src="./images/slidepic5.jpg" alt=""></a></li>
+      </ul>
+      <div class="arrow" id="arrow">
+        <a href="javascript:;" class="prev" id="arrLeft"></a>
+        <a href="javascript:;" class="next" id="arrRight"></a>
+      </div>
+    </div>
+  </div>
+
+  <script src="./utils.js"></script>
+  <script>
+     var config = [
+        {width: 400,top: 20,left: 50,opacity: 0.2, zIndex: 2},//0
+        {width: 600,top: 70,left: 0,opacity: 0.8,zIndex: 3},//1
+        {width: 800,top: 100,left: 200,opacity: 1,zIndex: 4},//2
+        {width: 600,top: 70,left: 600,opacity: 0.8,zIndex: 3},//3
+        {width: 400,top: 20,left: 750,opacity: 0.2,zIndex: 2}//4
+      ];
+      //获取到所有的li，因为li是绝对定位，所以可以把他打散，那么定义width为100%的图片就会随着li一起打散
+     var list =  my$("slide").getElementsByTagName("li");
+     //打散函数
+     var flag=true;//假设所有的动画执行完毕了---锁========
+     function assgin() {
+      for (let i = 0; i < list.length; i++) {
+        animation(list[i],config[i],function () {
+          flag=true//传入回调函数
+        })
+      }
+     }
+     //页面加载完毕，打散
+     window.onload = function () {
+      assgin();
+     }
+     
+      //鼠标进入,左右焦点的div显示
+      my$("slide").onmouseover = function () {
+        animation(my$("arrow"), {"opacity": 1});
+      };
+      //鼠标离开,左右焦点的div隐藏
+      my$("slide").onmouseout = function () {
+        animation(my$("arrow"), {"opacity": 0});
+      };
+    //点击右边按钮
+    my$('arrRight').onclick = function () {   
+      if(flag){//==========================================================
+          flag=false;
+          config.push(config.shift());
+          assgin();//重新分配
+        }
+    }
+    //点击左边按钮
+    my$('arrLeft').onclick = function () {
+      if(flag){//==================================================
+          flag=false;
+          config.unshift(config.pop());
+          assgin();
+        }
+
+    }
+  </script>
+</body>
+</html>

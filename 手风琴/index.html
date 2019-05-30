@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    div{
+      width: 1200px;
+      height: 400px;
+      margin: 50px auto;
+      border: 1px solid red;
+      overflow:hidden;
+    }
+    div ul {
+      width: 1200px;
+      list-style: none;
+    }
+    div li {
+      /* 五张图片加起来有1200px */
+      width: 240px;
+      height: 400px;
+      float: left;
+    }
+    
+  </style>
+</head>
+<body>
+  <div id="box">
+    <ul>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+  </div>
+<script>
+  //根据id获取对应的元素
+  function my$(id) {
+    return document.getElementById(id);
+}
+ //获取计算样式
+ function getStyle(element,attr) {
+      // return window.getComputedStyle?window.getComputedStyle(element,null).attr
+      // :element.currentStyle.attr 这样不行，因为attr是形参
+      //window.getComputedStyle记得不能带括号，带了括号就是返回值了
+     // window.getComputedStyle等价if(window.getComputedStyle)等价if(typeof window.getComputedStyle == "undefined")
+       return window.getComputedStyle?window.getComputedStyle(element,null)[attr]
+       :element.currentStyle[attr]
+    }
+//传入 移动的节点 和 移动的目标位置
+function animation(element,json,fn) {    
+    //这里是为了清除多次点击以后前面设置的的定时器，从而避免速度加快的现象
+    if (element.timeId) {
+      clearInterval(element.timeId)
+    }
+    //设置定时器
+   element.timeId = setInterval(function () { 
+     var flag = true ;//默认所有属性都到达目标
+     for(var attr in json){
+       //判断是否opacity
+       if (attr=="opacity") {
+         //这里不需要parseInt()函数，因为opacity得到的是数值类型，不会带px
+        var currentOpacity = getStyle(element,attr)*100;
+          var targetOpacity = json[attr]*100;          
+          var stepOpacity = (targetOpacity-currentOpacity)/10;
+          stepOpacity = stepOpacity>0?Math.ceil(stepOpacity):Math.floor(stepOpacity);
+          currentOpacity+=stepOpacity;
+          element.style[attr] = currentOpacity/100;
+       }else if (attr=="zIndex") {
+         //判断是否zIndex
+        element.style[attr] = json[attr];
+       }else{
+         //判断是否是普通属性
+          //因为getStyle()函数得到的有些属性值是带px，例如：width，所以通过parseInt()函数去除后面的单位值px;
+          var current = parseInt(getStyle(element,attr));
+          var target = json[attr];
+          var step = (target-current)/10;//json[attr]不能写成json.attr,因为attr是变量
+          step = step>0?Math.ceil(step):Math.floor(step);
+          current+=step;
+          element.style[attr] = current+"px";
+       }
+        //只要一个属性没有到达目标就变为false
+        if (current!=target) {
+          flag= false;
+        }
+     }
+      //全部到达目标
+      if (flag) {  
+          // console.log("我到了");
+          clearInterval(element.timeId);
+           //执行回调函数
+           if (fn){
+            fn();
+           }
+        }
+    },20);
+  }
+  
+  //获取到所有的li的元素
+  var list = my$("box").getElementsByTagName("li");
+  for (var i = 0; i < list.length; i++) {
+   //为所有的li设置图片
+   list[i].style.backgroundImage = "url(./images/"+(i+1)+".jpg)";
+   //鼠标移进事件
+   list[i].onmouseover = mouseOver;
+   //鼠标移出事件
+   list[i].onmouseout = mouseOut;
+  }
+  function mouseOver() {
+    //首先应该把所有li先动画width变为100px
+    for (var j = 0; j < list.length; j++) {
+      animation(list[j],{"width":100})
+    }
+    //把鼠标指向的li动画width变为800px-----800+100*4=1200
+    animation(this,{"width":800})
+  }
+  function mouseOut() {
+    //首先应该把所有li先动画width变为240px----240*5=1200
+    for (var j = 0; j < list.length; j++) {
+      animation(list[j],{"width":240})
+    }
+  }
+</script>
+</body>
+</html>
