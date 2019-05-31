@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+     * {
+      padding: 0;
+      margin: 0;
+    }
+
+    .comment {
+      font-size: 40px;
+      color: yellow;
+    }
+
+    .comment li {
+      float: left;
+      cursor: pointer;
+    }
+
+    ul {
+      list-style: none;
+    }
+  </style>
+  <script src="../jquery-1.12.1.js"></script>
+  <script>
+    $(function () {
+      //鼠标移入事件
+      $(".comment>li").bind('mouseenter',function () {
+        $(this).text("★").prevAll().text("★").end().nextAll().text("☆");
+      }).bind({'click':function () {
+        //点击的时候，设置给当前这个li一个属性,同时去除其他的index属性
+        $(this).attr('index','1').siblings('li').removeAttr('index');
+      },'mouseleave':function () {
+        $(".comment>li").text("☆")
+        $(".comment>li[index=1]").text("★").prevAll().text("★");
+      }})
+      //鼠标点击事件
+      //鼠标移出事件
+    })
+  </script>
+</head>
+<body>
+  <ul class="comment">
+    <li>☆</li>
+    <li>☆</li>
+    <li>☆</li>
+    <li>☆</li>
+    <li>☆</li>
+  </ul>
+</body>
+</html>
