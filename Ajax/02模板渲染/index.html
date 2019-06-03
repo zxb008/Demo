@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="dv">
+    <table id="demo">
+    </table>
+  </div>
+  <script src="./template-web.js"></script>
+  <script id="temp1" type="tetx/x-art-template">
+    {{each com}}
+    <!-- each 内部 $value 拿到的是当前被遍历的那个元素 -->
+    <tr>
+      <td>{{$value.name}}</td>
+      <td>{{$value.actor}}</td>
+      <td>{{$value.grade}}</td>
+    </tr>
+    {{/each}}
+  </script>
+  <script>
+    var xhr = new XMLHttpRequest();
+    xhr.open('get','https://www.easy-mock.com/mock/5cf2951d537bd6458373ef04/example_copy/wx');
+    xhr.send(null)
+    xhr.onreadystatechange = function () {
+      if (this.readyState != 4) return ;
+      var maoYan =  JSON.parse(this.responseText);//利用 JSON.parse(),把服务端返回的字符串变为js对象
+      //console.log(data);
+      var content = {com:maoYan.data.movieList}
+      //console.log(this.responseText);//返回文本
+
+      //借助模板引擎api渲染数据
+      var html = template('temp1',content);
+      document.getElementById('demo').innerHTML = html;
+    }
+  </script>
+</body>
+</html>

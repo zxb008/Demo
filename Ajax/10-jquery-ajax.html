@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>jQuery中对AJAX的封装</title>
+</head>
+<body>
+  <script src="jquery.js"></script>
+  <script>
+
+    // // 最基础的 调用
+    // $.ajax('./time.php', {
+    //   type: 'post', // method 请求方法
+    //   success: function (res) {
+    //     // res => 拿到的只是响应体
+    //     console.log(res)
+    //   }
+    // })
+
+    // $.ajax({
+    //   url: 'time.php',
+    //   type: 'post',
+    //   // 用于提交到服务端的参数，
+    //   // 如果是 GET 请求就通过 url 传递
+    //   // 如果是 POST 请求就通过请求体传递
+    //   data: { id: 1, name: '张三' },
+    //   success: function (res) {
+    //     console.log(res)
+    //   }
+    // })
+
+    // $.ajax({
+    //   url: 'json.php',
+    //   type: 'get',
+    //   success: function (res) {
+    //     // res 会自动根据服务端响应的 content-type 自动转换为对象
+    //     // 这是 jquery 内部实现的
+    //     console.log(res)
+    //   }
+    // })
+
+    $.ajax({
+      url: 'json.php',
+      //--------------------------------------------------------------------------------------------------------------------------
+      type: 'get',//默认'get'
+      // 设置的是请求参数,对象格式
+
+      //有一个是参数：contentType，请求体内容类型，默认:application/x-www-form-urlencoded ,
+
+      //如果是'get'，此时参数放在url后面，jquery内部方法会自动把对象类型的参数，转化为"id=1&name=张三",然后添加到url+"?"后面,
+           //所以get方法不需要设置：contentType
+
+      //如果是'post',此时参数放在请求体内，可以设置contentType,因为默认:application/x-www-form-urlencoded,(等价：send("id=1&name=张三"))
+           //那么jquery内部方法会自动把对象类型的参数，转化为"id=1&name=张三",然后添加到请求体里面。(等价： xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'))
+           //当然此时可以设置contentType:application/json,(等价： xhr.setRequestHeader('Content-Type', 'application/json'))
+           //那么jquery内部方法会自动把对象类型的参数{ id: 1, name: '张三' }添加到请求体里面。(等价：send({ id: 1, name: '张三' }))
+
+      //所以jquery已经封装好了，就默认contentType：application/x-www-form-urlencoded，
+      //get方法的时候，对象参数转化为字符串再添加到url后面，无需用到这个属性
+      //post方法的时候，根据这个属性的默认值，把对象参数转化为字符串，再添加到请求体中
+        //(注意：当然也可以设置contentType：application/json,直接把对象参数添加到请求体里面，但是这样没有必要)
+
+      data: { id: 1, name: '张三' },
+      //--------------------------------------------------------------------------------------------------------------------------
+
+      // 用于设置响应体的类型 注意 跟 data 参数没关系！！！,
+      dataType: 'json',//等价于 xhr.responseType = 'json'
+      success: function (res) {
+        //很大的情况下，服务端已经设置好了Content-Type：application/json,
+        //所以有时候不设置dataType,success函数也会根据服务端已经设置好了Content-Type来自动的把返回的数据变为对象格式
+        // 但是一旦设置的 dataType 选项，就不再关心 服务端 响应的 Content-Type 了，success函数直接根据dataType来把返回数据变为相应的格式
+        // 客户端会主观认为服务端返回的就是 JSON 格式的字符串
+        
+        console.log(res) // res => 拿到的只是响应体
+      }
+    })
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>同步模式的AJAX</title>
+</head>
+<body>
+  <script>
+
+    // var xhr = new XMLHttpRequest()
+    // xhr.open('GET', 'time.php', false)
+    // xhr.send() // 等到请求响应的过程全部完成再继续
+    // console.log(xhr.readyState)//此时已经为4，后面状态不会再改变
+    // xhr.onreadystatechange = function () {
+    //   console.log(this.readyState)
+    // }
+
+    // var xhr = new XMLHttpRequest()
+    // xhr.open('GET', 'time.php', false)
+    // xhr.onreadystatechange = function () {
+    //   console.log(this.readyState)
+    // }  //这样就可以
+    // xhr.send() // 等到请求响应的过程全部完成再继续
+   
+    
+
+
+    var xhr = new XMLHttpRequest()
+    xhr.open('GET', 'time.php', true)
+    xhr.send()
+    // 一定要注意事件注册时间问题
+    xhr.onreadystatechange = function () {
+      console.log(this.readyState)
+    }
+
+  </script>
+</body>
+</html>

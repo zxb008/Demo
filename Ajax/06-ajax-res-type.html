@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AJAX基础回顾</title>
+</head>
+<body>
+  <script>
+
+    var xhr = new XMLHttpRequest()
+    xhr.open('GET', 'test.php')
+    xhr.send()
+    // 我们通过代码告诉请求代理对象，服务端响应给我们的是 JSON
+    xhr.responseType = 'json'
+    xhr.onreadystatechange = function () {
+      if (this.readyState !== 4) return
+      console.log(this.response)
+      // this.response 获取到的结果会根据 this.responseType 的变化而变化
+      // this.responseText 永远获取的是字符串形式的响应体
+
+       //也就是说只有设置了xhr的responseType为""的时候，xhr.response和xhr.responseText返回的数据是一样的，
+       //否则（例如设置了json），只有xhr.response会返回正确的数据，而xhr.responseText会报错
+       
+       //所以，为了兼容性，一般不会去设置： xhr.responseType
+    }
+
+  </script>
+</body>
+</html>

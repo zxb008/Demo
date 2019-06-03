@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+     
+    var xhr = new XMLHttpRequest();
+    xhr.open('get',"https://www.easy-mock.com/mock/5cf2951d537bd6458373ef04/example_copy/wx");
+    xhr.send()
+    xhr.responseType = 'json'
+    xhr.onreadystatechange = function () {
+      if (this.readyState==4) {
+        console.log(this.response);
+        console.log(this.responseText);//会报错，因为 xhr.responseType = 'json'
+        //  console.log(JSON.parse(this.responseText));
+        //  console.log(this);
+      }
+     // console.log(this.readyState);
+    }
+  </script>
+</body>
+</html>
