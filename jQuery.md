@@ -488,7 +488,7 @@ stop(clearQueue, jumpToEnd);
 ```javascript
 // $(htmlStr)
 // htmlStr：html格式的字符串
-$('<span-这是一个span元素</span-');
+$('<span>这是一个span元素</span>');
 ```
 
 ### 添加节点
